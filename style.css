@@ -273,6 +273,45 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px; cursor: default; white-space: nowrap; width: 70px;
 }
 
+/* ══════════════════════════════════════ */
+/* 날짜 추가 모달                          */
+/* ══════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-box {
+  background: #fff;
+  border: 2px solid #000;
+  padding: 28px 32px;
+  max-width: 520px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-box h3 { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+/* 모달 달력 — 기존 날짜는 회색, 새 날짜는 검정 */
+#add-dates-calendar .cal-table td.already-in-event {
+  background: #ccc;
+  color: #777;
+  cursor: not-allowed;
+}
+#add-dates-calendar .cal-table td.already-in-event:hover {
+  background: #ccc;
+}
+
 /* 반응형 */
 @media (max-width: 768px) {
   .create-layout { grid-template-columns: 1fr; gap: 20px; }

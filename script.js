@@ -92,6 +92,12 @@ let calendarDragging = false;
 let calendarDragMode = null;
 let calWeekOffset = 0;
 
+// 날짜 추가 모달 상태
+let addDatesSelected = new Set();
+let addDatesWeekOffset = 0;
+let addDatesDragging = false;
+let addDatesDragMode = null;
+
 // ── 초기화 ──
 document.addEventListener('DOMContentLoaded', () => {
   renderCalendar();
@@ -245,6 +251,12 @@ function setupCreateListeners() {
     renderCalendar();
   });
   document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+  document.getElementById('add-dates-btn').addEventListener('click', openAddDatesModal);
+  document.getElementById('add-dates-cancel').addEventListener('click', closeAddDatesModal);
+  document.getElementById('add-dates-confirm').addEventListener('click', confirmAddDates);
+  document.getElementById('add-dates-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('add-dates-modal')) closeAddDatesModal();
+  });
 }
 
 function showCreatePage() {
@@ -718,4 +730,126 @@ function copyLink() {
     btn.textContent = '복사됨!';
     setTimeout(() => btn.textContent = '복사', 1500);
   });
+}
+
+// ══════════════════════════════════════
+// 날짜 추가 모달
+// ══════════════════════════════════════
+function openAddDatesModal() {
+  addDatesSelected = new Set();
+  addDatesWeekOffset = 0;
+  renderAddDatesCalendar();
+  document.getElementById('add-dates-modal').style.display = 'flex';
+}
+
+function closeAddDatesModal() {
+  document.getElementById('add-dates-modal').style.display = 'none';
+  addDatesSelected = new Set();
+}
+
+function confirmAddDates() {
+  if (addDatesSelected.size === 0) {
+    closeAddDatesModal();
+    return;
+  }
+  const existing = new Set(currentEventData.dates);
+  addDatesSelected.forEach(d => existing.add(d));
+  currentEventData.dates = Array.from(existing).sort();
+  dbSave(currentEventId, currentEventData);
+  closeAddDatesModal();
+  renderResultGrid();
+  renderInputGrid();
+  renderBestTime();
+}
+
+function renderAddDatesCalendar() {
+  const container = document.getElementById('add-dates-calendar');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay() + addDatesWeekOffset * 7);
+  const existingDates = new Set(currentEventData.dates);
+
+  let html = '<div class="cal-nav"><button class="btn-outline btn-sm" id="add-cal-prev">◀ 이전</button>';
+  html += '<button class="btn-outline btn-sm" id="add-cal-next">다음 ▶</button></div>';
+  html += '<table class="cal-table"><thead><tr><th></th>';
+  for (const d of DAY_SHORT) html += `<th>${d}</th>`;
+  html += '<th></th></tr></thead><tbody>';
+
+  for (let week = 0; week < 5; week++) {
+    const weekStart = new Date(startOfWeek);
+    weekStart.setDate(startOfWeek.getDate() + week * 7);
+    const firstDate = new Date(weekStart);
+    const lastDate = new Date(weekStart);
+    lastDate.setDate(lastDate.getDate() + 6);
+    let monthLabel = MONTH_NAMES[firstDate.getMonth()];
+    if (firstDate.getMonth() !== lastDate.getMonth())
+      monthLabel = MONTH_NAMES[firstDate.getMonth()] + '/' + MONTH_NAMES[lastDate.getMonth()];
+
+    html += `<tr><td class="cal-label">${monthLabel}</td>`;
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + d);
+      const dateStr = formatDate(date);
+      const isToday = date.getTime() === today.getTime();
+      const isExisting = existingDates.has(dateStr);
+      const isSelected = addDatesSelected.has(dateStr);
+      let cls = '';
+      if (isToday) cls = 'today';
+      if (isExisting) cls += ' already-in-event';
+      else if (isSelected) cls += ' selected';
+      html += `<td class="${cls.trim()}" data-date="${dateStr}" data-existing="${isExisting}">${date.getDate()}</td>`;
+    }
+    html += `<td class="cal-year">${firstDate.getFullYear()}</td></tr>`;
+  }
+  html += '</tbody></table>';
+  container.innerHTML = html;
+
+  if (!container._calBound) {
+    container._calBound = true;
+
+    container.addEventListener('mousedown', e => {
+      const td = e.target.closest('td[data-date]');
+      if (!td || td.dataset.existing === 'true') return;
+      e.preventDefault();
+      addDatesDragging = true;
+      addDatesDragMode = td.classList.contains('selected') ? 'remove' : 'add';
+      toggleAddDatesCell(td);
+    });
+    container.addEventListener('mouseover', e => {
+      if (!addDatesDragging) return;
+      const td = e.target.closest('td[data-date]');
+      if (td && td.dataset.existing !== 'true') toggleAddDatesCell(td);
+    });
+    document.addEventListener('mouseup', () => { addDatesDragging = false; });
+
+    container.addEventListener('touchstart', e => {
+      const td = e.target.closest('td[data-date]');
+      if (!td || td.dataset.existing === 'true') return;
+      e.preventDefault();
+      addDatesDragging = true;
+      addDatesDragMode = td.classList.contains('selected') ? 'remove' : 'add';
+      toggleAddDatesCell(td);
+    }, { passive: false });
+    container.addEventListener('touchmove', e => {
+      if (!addDatesDragging) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      const td = el && el.closest('td[data-date]');
+      if (td && td.dataset.existing !== 'true') toggleAddDatesCell(td);
+    }, { passive: false });
+    container.addEventListener('touchend', () => { addDatesDragging = false; });
+
+    container.addEventListener('click', e => {
+      if (e.target.closest('#add-cal-prev')) { addDatesWeekOffset -= 5; renderAddDatesCalendar(); }
+      if (e.target.closest('#add-cal-next')) { addDatesWeekOffset += 5; renderAddDatesCalendar(); }
+    });
+  }
+}
+
+function toggleAddDatesCell(td) {
+  const date = td.dataset.date;
+  if (addDatesDragMode === 'add') { addDatesSelected.add(date); td.classList.add('selected'); }
+  else { addDatesSelected.delete(date); td.classList.remove('selected'); }
 }
