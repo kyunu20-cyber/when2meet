@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "when2meet",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/jimkim/Downloads/code_workspace/when2meet", "-l", "3456"],
+      "port": 3456
+    }
+  ]
+}

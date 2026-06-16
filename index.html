@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1kp 웬투밋</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── 헤더 ── -->
+  <header id="header">
+    <div class="header-top">
+      <a href="#" id="nav-home" class="header-logo-link">
+        <img src="logo.webp" alt="1KP" class="header-logo">
+      </a>
+      <p class="header-subtitle">1kp 웬투밋</p>
+    </div>
+    <nav>
+      <a href="#" id="nav-new" class="nav-link">새 이벤트 만들기</a>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 페이지 1: 이벤트 생성                  -->
+  <!-- ══════════════════════════════════════ -->
+  <main id="page-create">
+    <div class="create-layout">
+      <div class="create-left">
+        <h2>가능한 날짜는?</h2>
+        <p class="hint">클릭 & 드래그로 날짜를 선택하세요.</p>
+        <div id="calendar"></div>
+        <button id="today-btn" class="btn-outline">오늘</button>
+      </div>
+      <div class="create-center">
+        <input type="text" id="event-title" placeholder="이벤트 이름">
+      </div>
+      <div class="create-right">
+        <h2>가능한 시간은?</h2>
+        <div class="time-field">
+          <label>시작 시간:</label>
+          <select id="time-start"></select>
+        </div>
+        <div class="time-field">
+          <label>종료 시간:</label>
+          <select id="time-end"></select>
+        </div>
+        <div class="ready-section">
+          <span class="ready-label">준비 완료?</span>
+          <button id="create-btn" class="btn-outline">이벤트 생성</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 페이지 2: 이벤트 뷰                   -->
+  <!-- ══════════════════════════════════════ -->
+  <main id="page-event" style="display:none;">
+    <h1 id="event-name"></h1>
+    <p class="share-info">
+      공유 링크:
+      <input type="text" id="share-link" readonly>
+      <button id="copy-link-btn" class="btn-outline btn-sm">복사</button>
+    </p>
+
+    <!-- ★ 베스트 타임 추천 -->
+    <div id="best-time-section" class="best-time-section" style="display:none;">
+      <h3>🏆 Best Time</h3>
+      <div id="best-time-list"></div>
+    </div>
+
+    <!-- ★ 미응답자 표시 -->
+    <div id="pending-section" class="pending-section" style="display:none;">
+      <h3>⏳ 아직 응답 안 한 멤버</h3>
+      <div id="pending-members"></div>
+    </div>
+
+    <div class="event-layout">
+      <!-- 좌측 -->
+      <div class="event-left">
+        <h2>로그인</h2>
+        <div class="signin-form">
+          <div class="form-row">
+            <label>이름 선택:</label>
+            <div class="member-buttons" id="member-buttons"></div>
+          </div>
+        </div>
+
+        <div id="my-availability-section" style="display:none;">
+          <h2>내 가능 시간</h2>
+          <p class="hint">클릭 & 드래그로 가능한 시간을 선택하세요.</p>
+
+          <!-- ★ 빠른 선택 버튼 -->
+          <div class="quick-select">
+            <button class="btn-quick" data-action="morning">오전 전체</button>
+            <button class="btn-quick" data-action="afternoon">오후 전체</button>
+            <button class="btn-quick" data-action="all">종일</button>
+            <button class="btn-quick btn-clear" data-action="clear">전체 해제</button>
+          </div>
+
+          <div class="grid-wrapper">
+            <div id="input-grid" class="time-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 -->
+      <div class="event-right">
+        <h2>전체 가능 시간</h2>
+        <div class="legend-row">
+          <span>0/5명 가능</span>
+          <div class="legend-bar">
+            <div class="legend-gradient"></div>
+          </div>
+          <span>5/5명 가능</span>
+        </div>
+        <p class="hint" id="hover-info">시간표 위에 마우스를 올려 누가 가능한지 확인하세요</p>
+        <div class="grid-wrapper">
+          <div id="result-grid" class="time-grid"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

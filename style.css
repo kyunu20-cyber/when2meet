@@ -1,0 +1,283 @@
+/* ── Reset & Base ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #fff;
+  color: #000;
+  font-size: 14px;
+  line-height: 1.4;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ── Header ── */
+#header {
+  background: #000;
+  padding: 32px 16px 16px;
+  text-align: center;
+}
+.header-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.header-logo-link { display: inline-block; }
+.header-logo {
+  height: 120px;
+  width: auto;
+}
+.header-subtitle {
+  color: #999;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+#header nav {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.nav-link {
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+.nav-link:hover { text-decoration: underline; }
+
+/* ── 공통 버튼 ── */
+.btn-outline {
+  background: #fff;
+  border: 1px solid #000;
+  padding: 4px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-outline:hover { background: #eee; }
+.btn-sm { padding: 2px 10px; font-size: 12px; }
+
+.hint { font-size: 13px; color: #555; margin: 4px 0 8px; }
+
+/* ══════════════════════════════════════ */
+/* 페이지 1: 이벤트 생성                  */
+/* ══════════════════════════════════════ */
+#page-create { padding: 30px 24px; max-width: 1100px; margin: 0 auto; }
+
+.create-layout {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.create-left { text-align: center; }
+.create-left h2 { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+
+/* 달력 */
+.cal-table { border-collapse: collapse; margin: 0 auto 10px; }
+.cal-table th {
+  font-weight: bold; font-size: 13px; padding: 2px 0; width: 36px; text-align: center;
+}
+.cal-table td {
+  width: 36px; height: 30px; text-align: center; font-size: 13px;
+  cursor: pointer; border: 1px solid #ccc; user-select: none;
+}
+.cal-table td.empty { border: none; cursor: default; }
+.cal-table td.selected { background: #000; color: #fff; font-weight: bold; }
+.cal-table td:not(.empty):hover { background: #fee; }
+.cal-table td.today { font-weight: bold; border: 2px solid #000; }
+.cal-nav {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.cal-label { font-size: 13px; font-weight: bold; padding-right: 6px; text-align: right; }
+.cal-year { font-size: 13px; padding-left: 6px; }
+
+.create-center { display: flex; align-items: flex-start; padding-top: 20px; }
+#event-title {
+  font-size: 24px; font-weight: bold; border: 1px solid #000;
+  padding: 10px 16px; text-align: center; width: 280px; font-family: inherit;
+}
+
+.create-right { text-align: center; }
+.create-right h2 { font-size: 18px; font-weight: bold; margin-bottom: 16px; }
+.time-field { margin-bottom: 12px; }
+.time-field label { margin-right: 8px; font-size: 14px; }
+.time-field select { font-size: 14px; padding: 3px 6px; border: 1px solid #000; font-family: inherit; }
+.ready-section {
+  margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.ready-label { font-size: 20px; font-weight: bold; }
+#today-btn { margin-top: 8px; }
+
+/* ══════════════════════════════════════ */
+/* 페이지 2: 이벤트 뷰                   */
+/* ══════════════════════════════════════ */
+#page-event { padding: 20px 24px; max-width: 1200px; margin: 0 auto; }
+#page-event h1 { font-size: 28px; margin-bottom: 6px; }
+
+.share-info {
+  margin-bottom: 16px; font-size: 13px;
+  display: flex; align-items: center; gap: 8px;
+}
+#share-link {
+  border: 1px solid #999; padding: 3px 8px; font-size: 12px; width: 360px; font-family: monospace;
+}
+
+/* ★ 베스트 타임 */
+.best-time-section {
+  background: #f5f5f5;
+  border: 2px solid #000;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+}
+.best-time-section h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.best-time-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 13px;
+}
+.best-time-item:last-child { border-bottom: none; }
+.best-time-badge {
+  background: #000;
+  color: #fff;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 50px;
+  text-align: center;
+}
+.best-time-info { flex: 1; }
+.best-time-members { color: #555; font-size: 12px; }
+
+/* ★ 미응답자 */
+.pending-section {
+  margin-bottom: 16px;
+  padding: 10px 16px;
+  border: 1px dashed #999;
+}
+.pending-section h3 { font-size: 14px; margin-bottom: 6px; }
+.pending-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  margin: 3px 4px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  background: #fafafa;
+}
+.pending-member .emoji { font-size: 16px; }
+
+/* 이벤트 레이아웃 */
+.event-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.event-left h2 { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+.signin-form { margin-bottom: 20px; }
+.form-row { margin-bottom: 10px; }
+.form-row label { display: block; font-size: 14px; margin-bottom: 6px; }
+
+/* ★ 멤버 버튼 (이모지 + 컬러) */
+.member-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.member-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 2px solid var(--member-color, #000);
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.member-btn .emoji { font-size: 18px; }
+.member-btn:hover { background: #f5f5f5; }
+.member-btn.active {
+  background: var(--member-color, #000);
+  color: #fff;
+  border-color: var(--member-color, #000);
+}
+
+/* ★ 빠른 선택 버튼 */
+.quick-select {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.btn-quick {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 5px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-quick:hover { background: #333; }
+.btn-quick.btn-clear {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+}
+.btn-quick.btn-clear:hover { background: #eee; }
+
+/* 우측 - 결과 */
+.event-right h2 { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+.legend-row {
+  display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 6px;
+}
+.legend-bar { width: 120px; height: 16px; border: 1px solid #000; }
+.legend-gradient {
+  width: 100%; height: 100%;
+  background: linear-gradient(to right, #e8e8e8, #E74C3C, #F39C12, #3498DB, #9B59B6, #1ABC9C);
+}
+
+/* 시간 그리드 */
+.grid-wrapper { overflow-x: auto; margin-top: 10px; }
+.time-grid table { border-collapse: collapse; }
+.time-grid th {
+  font-size: 12px; font-weight: bold; padding: 2px 4px; text-align: center; min-width: 50px;
+}
+.time-grid th.time-label {
+  text-align: right; padding-right: 6px; font-weight: normal;
+  font-size: 12px; min-width: 70px; white-space: nowrap;
+}
+.time-grid th.date-header { border-bottom: 1px solid #000; }
+.time-grid th.day-header { font-weight: normal; font-size: 11px; }
+.time-grid td {
+  width: 50px; height: 14px; border: 1px solid #999;
+  cursor: pointer; user-select: none; transition: background 0.1s;
+}
+.time-grid td.half-border { border-bottom: 1px dotted #bbb; }
+.time-grid td.hour-border { border-bottom: 1px solid #999; }
+.time-grid td.available { background: #000; }
+.time-grid td.result-cell { cursor: default; }
+.time-grid td.time-label-cell {
+  border: none; text-align: right; padding-right: 6px;
+  font-size: 12px; cursor: default; white-space: nowrap; width: 70px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .create-layout { grid-template-columns: 1fr; gap: 20px; }
+  .create-center { justify-content: center; }
+  #event-title { width: 100%; }
+  .event-layout { grid-template-columns: 1fr; gap: 20px; }
+  #share-link { width: 200px; }
+}
