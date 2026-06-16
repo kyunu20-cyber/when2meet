@@ -38,6 +38,9 @@ function dbLoad(eventId, callback) {
   if (useFirebase) {
     db.ref('events/' + eventId).once('value', snap => {
       callback(snap.exists() ? snap.val() : storageGet('event_' + eventId));
+    }, err => {
+      console.error('Firebase read error:', err.code, err.message);
+      callback(storageGet('event_' + eventId));
     });
   } else {
     callback(storageGet('event_' + eventId));
@@ -299,7 +302,14 @@ function checkUrlForEvent() {
   const params = new URLSearchParams(location.search);
   const eventId = params.get('event');
   if (eventId) {
-    dbLoad(eventId, data => { if (data) openEvent(eventId, data); });
+    dbLoad(eventId, data => {
+      if (data) {
+        openEvent(eventId, data);
+      } else {
+        alert('이벤트를 불러올 수 없습니다.\nFirebase 데이터베이스 규칙을 확인해주세요.');
+        history.replaceState(null, '', location.pathname);
+      }
+    });
   }
 }
 
